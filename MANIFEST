@@ -1,0 +1,7 @@
+Build.PL
+lib/Net/IPTrie.pm
+lib/Net/IPTrie/Node.pm
+MANIFEST			This list of files
+META.yml
+README
+t/IPTrie.t
