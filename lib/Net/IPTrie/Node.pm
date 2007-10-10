@@ -5,7 +5,7 @@ use strict;
 use Carp;
 use Class::Struct;
 
-use version; our $VERSION = qv('0.1');
+use version; our $VERSION = qv('0.2');
 
 =head1 NAME
 

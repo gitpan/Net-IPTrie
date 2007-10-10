@@ -6,7 +6,7 @@ use Carp;
 use NetAddr::IP;
 use Net::IPTrie::Node;
 
-use version; our $VERSION = qv('0.1');
+use version; our $VERSION = qv('0.2');
 
 1;
 
