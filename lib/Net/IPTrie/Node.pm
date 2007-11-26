@@ -5,7 +5,7 @@ use strict;
 use Carp;
 use Class::Struct;
 
-use version; our $VERSION = qv('0.2');
+use version; our $VERSION = qv('0.3');
 
 =head1 NAME
 
@@ -47,9 +47,13 @@ struct (
     New Net::IPTrie::Node object
   Examples:
     my $n = Net::IPTrie::Node->new(up=>$up, address=>"10.0.0.1")
+
+=head1 INSTANCE METHODS
+
 =cut
 
 ############################################################################
+
 =head2 parent - Find closest parent node with IP information
 
   Arguments: 
@@ -60,6 +64,7 @@ struct (
     my $parent = $node->parent;
 
 =cut
+
 sub parent {
     my ($self) = @_;
 
@@ -71,6 +76,7 @@ sub parent {
 }
 
 ############################################################################
+
 =head2 delete - Delete an IP node from the tree
 
   Note: The node is actually emptied, not deleted
@@ -84,6 +90,7 @@ sub parent {
    $n->delete();
 
 =cut
+
 sub delete {
     my ($self) = @_;
     $self->address(undef);
@@ -106,7 +113,7 @@ Carlos Vicente  C<< <<cvicente@cpan.org>> >>
 
 =head1 LICENCE AND COPYRIGHT
 
-Copyright (c) <2007-2010>, Carlos Vicente C<< <<cvicente@cpan.org>> >>. All rights reserved.
+Copyright (c) 2007-2010, Carlos Vicente C<<cvicente@cpan.org>>. All rights reserved.
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself. See L<perlartistic>.

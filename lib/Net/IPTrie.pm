@@ -6,7 +6,7 @@ use Carp;
 use NetAddr::IP;
 use Net::IPTrie::Node;
 
-use version; our $VERSION = qv('0.2');
+use version; our $VERSION = qv('0.3');
 
 1;
 
@@ -18,7 +18,7 @@ Net::IPTrie - Perl module for building IPv4 and IPv6 address space hierarchies f
 
     use Net::IPTrie;
     my $tr = Net::IPTrie->new(version=>4);  # IPv4
-    my $n  = $tr->add(addres=>'10.0.0.0/8', prefix=>8);
+    my $n  = $tr->add(address=>'10.0.0.0/8', prefix=>8);
     my $a  = $tr->add(address=>'10.0.0.1', data) # prefix defaults to 32
     $a->parent->address eq $n->address or die "?";
 
@@ -40,8 +40,7 @@ Net::IPTrie - Perl module for building IPv4 and IPv6 address space hierarchies f
  It is implemented exclusively in Perl.
 
 =head1 CLASS METHODS
-=cut
-############################################################################
+
 =head2 new - Class Constructor
 
 
@@ -54,6 +53,7 @@ Net::IPTrie - Perl module for building IPv4 and IPv6 address space hierarchies f
     my $tr = Net::IPTrie->new(version=>4);
 
 =cut
+
 sub new {
     my ($proto, %argv) = @_;
     croak "Missing required parameters: version" unless defined $argv{version};
@@ -74,9 +74,10 @@ sub new {
     return $self;
 }
 
-=head1 INSTANCE METHODS
-=cut
 ############################################################################
+
+=head1 INSTANCE METHODS
+
 =head2 version - Set or get IP version (4 or 6)
 
   Arguments: 
@@ -87,6 +88,7 @@ sub new {
     print $tr->version;
 
 =cut
+
 sub version { 
     my ($self, $v) = @_;
     croak "version is an instance method" unless ref($self);
@@ -96,6 +98,7 @@ sub version {
 }
 
 ############################################################################
+
 =head2 size - Set or get IP size (32 or 128)
 
   Arguments:   
@@ -106,6 +109,7 @@ sub version {
     print $tr->size;   
 
 =cut
+
 sub size { 
     my ($self, $s) = @_;
     croak "size is an instance method" unless ref($self);
@@ -114,6 +118,7 @@ sub size {
 }
 
 ############################################################################
+
 =head2 find - Find an IP object in the trie
 
     If the given IP does not exist, there are two options:
@@ -134,12 +139,14 @@ sub size {
     my $n = $tr->find("10.0.0.1", 32);
 
 =cut
+
 sub find {
     my ($self, %argv) = @_;
     croak "find is an instance method" unless ref($self);
 
     my ($address, $iaddress, $prefix, $deep) = @argv{'address', 'iaddress', 'prefix', 'deep'};
-    croak "Missing required arguments: address or iaddress" unless ($address || $iaddress);
+    croak "Missing required arguments: address or iaddress" 
+	unless (defined $address || defined $iaddress);
     
     $prefix = $self->size unless ( $prefix );
     my $p   = $self->{_trie};   # pointer that starts at the root
@@ -183,8 +190,8 @@ sub find {
     return $p;
 }
 
-
 ############################################################################
+
 =head2 add - Add an IP to the trie
 
   Arguments: 
@@ -199,12 +206,14 @@ sub find {
     my $n = $tr->add(address=>"10.0.0.1", prefix=>32, data=>\$data);
 
 =cut
+
 sub add {
     my ($self, %argv) = @_;
     croak "add is an instance method" unless ref($self);
 
     my ($address, $iaddress, $prefix, $data) = @argv{'address', 'iaddress', 'prefix', 'data'};
-    croak "Missing required arguments: address" unless ( $address || $iaddress );
+    croak "Missing required arguments: address" 
+	unless ( defined $address || defined $iaddress );
 
     $prefix = $self->size unless ( $prefix );
 
@@ -243,6 +252,7 @@ sub add {
     my $count = $tr->traverse(code=>$code);
     
 =cut
+
 sub traverse {
     my ($self, %argv) = @_;
     croak "traverse is an instance method" unless ref($self);
@@ -258,6 +268,7 @@ sub traverse {
     }
     return $count;
 }
+
 
 ############################################################################
 #
@@ -339,18 +350,16 @@ sub _depth_first {
 
 =head1 AUTHOR
 
-Carlos Vicente  C<< <<cvicente@cpan.org>> >>
+Carlos Vicente  C<<cvicente@cpan.org>>
 
 =head1 SEE ALSO
-
-Net::Patricia
 
 Net::Patricia relies on a C library and currently does not support IPv6.  It also contains known bugs.
 I have not done any performance comparisons.
 
 =head1 LICENCE AND COPYRIGHT
 
-Copyright (c) <2007-2010>, Carlos Vicente C<< <<cvicente@cpan.org>> >>. All rights reserved.
+Copyright (c) 2007-2010, Carlos Vicente C<<cvicente@cpan.org>>. All rights reserved.
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself. See L<perlartistic>.

@@ -1,8 +1,8 @@
 ---
 name: Net-IPTrie
-version: v0.2
+version: v0.3
 author:
-  - 'Carlos Vicente  C<< <<cvicente@cpan.org>> >>'
+  - 'Carlos Vicente  C<<cvicente@cpan.org>>'
 abstract: Perl module for building IPv4 and IPv6 address space hierarchies fast
 license: perl
 resources:
@@ -15,10 +15,10 @@ requires:
 provides:
   Net::IPTrie:
     file: lib/Net/IPTrie.pm
-    version: v0.2
+    version: v0.3
   Net::IPTrie::Node:
     file: lib/Net/IPTrie/Node.pm
-    version: v0.2
+    version: v0.3
 generated_by: Module::Build version 0.2808
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
