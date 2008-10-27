@@ -6,7 +6,7 @@ use Carp;
 use NetAddr::IP;
 use Net::IPTrie::Node;
 
-use version; our $VERSION = qv('0.3');
+use version; our $VERSION = qv('0.4');
 
 1;
 
@@ -19,8 +19,8 @@ Net::IPTrie - Perl module for building IPv4 and IPv6 address space hierarchies f
     use Net::IPTrie;
     my $tr = Net::IPTrie->new(version=>4);  # IPv4
     my $n  = $tr->add(address=>'10.0.0.0/8', prefix=>8);
-    my $a  = $tr->add(address=>'10.0.0.1', data) # prefix defaults to 32
-    $a->parent->address eq $n->address or die "?";
+    my $a  = $tr->add(address=>'10.0.0.1', data=>$data) # prefix defaults to 32
+    $a->parent->address eq $n->address and print "$a is within $n";
 
     # Addresses can be provided in integer (decimal) format
     # 10.0.0.7 == 167772167
@@ -148,12 +148,12 @@ sub find {
     croak "Missing required arguments: address or iaddress" 
 	unless (defined $address || defined $iaddress);
     
-    $prefix = $self->size unless ( $prefix );
+    $prefix = $self->size unless ( defined $prefix );
     my $p   = $self->{_trie};   # pointer that starts at the root
     my $bit = $self->size;      # Start at the most significant bit
 
     # Convert string address into integer if necessary
-    if ( $address && !$iaddress ){
+    if ( defined $address && !defined $iaddress ){
 	$iaddress = $self->_ip2int($address);
     }
 
@@ -181,7 +181,7 @@ sub find {
 	$p = $p->$r;
 
 	# If the address matches, return node
-	if ( $p->iaddress && $p->iaddress == $iaddress 
+	if ( defined $p->iaddress && $p->iaddress == $iaddress 
 	     && $p->prefix == $prefix ){
 	    return $p;
 	}
@@ -212,21 +212,21 @@ sub add {
     croak "add is an instance method" unless ref($self);
 
     my ($address, $iaddress, $prefix, $data) = @argv{'address', 'iaddress', 'prefix', 'data'};
-    croak "Missing required arguments: address" 
+    croak "Missing required arguments: address\n" 
 	unless ( defined $address || defined $iaddress );
 
-    $prefix = $self->size unless ( $prefix );
+    $prefix = $self->size unless ( defined $prefix );
 
     # Convert string address into integer if necessary
-    if ( $address && !$iaddress ){
+    if ( defined $address && !defined $iaddress ){
 	$iaddress = $self->_ip2int($address);
-    }elsif ( $iaddress && !$address ){
+    }elsif ( defined $iaddress && !defined $address ){
 	$address = $self->_int2ip($iaddress);
     }
 
     my $n = $self->find(iaddress=>$iaddress, prefix=>$prefix, deep=>1);
     
-    unless ( $n->iaddress && $n->iaddress == $iaddress ){
+    unless ( defined $n->iaddress && $n->iaddress == $iaddress ){
 	$n->iaddress($iaddress);
 	$n->address($address);
 	$n->prefix($prefix);
@@ -353,6 +353,8 @@ sub _depth_first {
 Carlos Vicente  C<<cvicente@cpan.org>>
 
 =head1 SEE ALSO
+
+Net::IPTrie::Node
 
 Net::Patricia relies on a C library and currently does not support IPv6.  It also contains known bugs.
 I have not done any performance comparisons.

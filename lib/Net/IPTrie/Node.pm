@@ -5,7 +5,7 @@ use strict;
 use Carp;
 use Class::Struct;
 
-use version; our $VERSION = qv('0.3');
+use version; our $VERSION = qv('0.4');
 
 =head1 NAME
 
@@ -22,7 +22,7 @@ Net::IPTrie::Node
 =cut
 
 struct (
-'up'      => '$',
+'up'        => '$',
 'left'      => '$',
 'right'     => '$',
 'address'   => '$',
@@ -69,7 +69,7 @@ sub parent {
     my ($self) = @_;
 
     my $p = $self->up;
-    while ( defined $p && !$p->iaddress ){
+    while ( defined $p && !defined $p->iaddress ){
 	$p = $p->up;
     }
     return $p;

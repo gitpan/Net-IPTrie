@@ -10,9 +10,16 @@ isa_ok($tr, 'Net::IPTrie', 'Constructor');
 my $n = $tr->add(address=>'10.0.0.0', prefix=>8);
 isa_ok($n, 'Net::IPTrie::Node', 'Node Constructor');
 
+# Root (default route)
+my $r = $tr->add(address=>'0.0.0.0', prefix=>0);
+is($r->address, '0.0.0.0', 'address');
+is($r->iaddress, 0, 'iaddress');
+is($r->prefix, 0, 'prefix');
+
 is($n->address, '10.0.0.0', 'address');
 is($n->iaddress, '167772160', 'iaddress');
 is($n->prefix, '8', 'prefix');
+is($n->parent->address, $r->address, 'root parent');
 
 my $a = $tr->add(address=>'10.0.0.0', prefix=>24);
 is($a->parent->address, $n->address, 'parent');
@@ -31,6 +38,14 @@ my $c = $tr->add(iaddress=>'167772167', data=>'blah');
 is($c->parent->address, $a->address, 'parent');
 is($c->data, 'blah', 'data');
 
+# Traversal
+my $list = ();
+my $code = sub { push @$list, shift @_ };
+my $count = $tr->traverse(code=>$code);
+
+my $tlist = [$r, $n, $a, $b, $c];
+is_deeply($tlist, $list, 'traverse');
+is($count, 5, 'traverse count');
 
 # Delete does not actually delete the node, but empties it
 $a->delete();
@@ -38,15 +53,6 @@ is($a->address,  undef, 'delete');
 is($a->iaddress, undef, 'delete');
 is($a->prefix,   undef, 'delete');
 is($a->data,     undef, 'delete');
-
-# Traversal
-my $list = ();
-my $code = sub { push @$list, shift @_ };
-my $count = $tr->traverse(code=>$code);
-
-my $tlist = [$n, $b, $c];
-is_deeply($tlist, $list, 'traverse');
-is($count, 3, 'traverse count');
 
 # b's parent should now be $n, not $a
 is($b->parent->address, $n->address, 'parent');
