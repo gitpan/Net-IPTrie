@@ -5,8 +5,8 @@ use strict;
 use Carp;
 use NetAddr::IP;
 use Net::IPTrie::Node;
-
-use version; our $VERSION = qv('0.4');
+use vars qw($VERSION);
+$VERSION = '0.5';
 
 1;
 
@@ -350,7 +350,7 @@ sub _depth_first {
 
 =head1 AUTHOR
 
-Carlos Vicente  C<<cvicente@cpan.org>>
+Carlos Vicente  <cvicente@cpan.org>
 
 =head1 SEE ALSO
 
@@ -361,7 +361,7 @@ I have not done any performance comparisons.
 
 =head1 LICENCE AND COPYRIGHT
 
-Copyright (c) 2007-2010, Carlos Vicente C<<cvicente@cpan.org>>. All rights reserved.
+Copyright (c) 2007-2010, Carlos Vicente <cvicente@cpan.org>. All rights reserved.
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself. See L<perlartistic>.

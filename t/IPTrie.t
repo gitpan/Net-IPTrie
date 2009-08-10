@@ -62,10 +62,13 @@ is($b->parent->address, $n->address, 'parent');
 my $tr6 = Net::IPTrie->new(version=>6);
 isa_ok($tr, 'Net::IPTrie', 'Constructor');
 
-my $n6 = $tr->add(address=>'2001:468:D00::', prefix=>40);
+my $n6 = $tr->add(address=>'FEC0:468:D00::', prefix=>40);
 
-my $a6 = $tr->add(address=>'2001:468:D00::', prefix=>48);
+my $a6 = $tr->add(address=>'FEC0:468:D00::', prefix=>48);
 is($a6->parent->address, $n6->address, 'parent');
 
-my $b6 = $tr->add(address=>'2001:468:D00:1::/64', prefix=>64);
+my $b6 = $tr->add(address=>'FEC0:468:D00:1::', prefix=>64);
 is($b6->parent->address, $a6->address, 'parent');
+
+my $c6 = $tr->add(address=>'FEC0:468:D00:1::80DF:3C16', prefix=>128);
+is($c6->parent->address, $b6->address, 'parent');
