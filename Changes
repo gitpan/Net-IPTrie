@@ -1,6 +1,10 @@
 
 Revision history for Net::IPTrie
 
+0.5.1 2010/08/12
+  - Fixed bug where a node's parent would not be found after the node was deleted
+  - Fixed IPv6 tests
+
 0.5  2009/08/10
   - Removed requirement for version.pm
 

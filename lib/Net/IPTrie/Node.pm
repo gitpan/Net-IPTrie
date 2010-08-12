@@ -5,7 +5,7 @@ use strict;
 use Carp;
 use Class::Struct;
 use vars qw($VERSION);
-$VERSION = '0.5';
+$VERSION = '0.5.1';
 
 =head1 NAME
 

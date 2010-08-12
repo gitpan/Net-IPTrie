@@ -57,18 +57,22 @@ is($a->data,     undef, 'delete');
 # b's parent should now be $n, not $a
 is($b->parent->address, $n->address, 'parent');
 
+$b->delete();
+my $s = $tr->find(address=>'10.0.0.1');
+is($s->address, $n->address, 'find');
+
 # IPv6 tests
 
 my $tr6 = Net::IPTrie->new(version=>6);
 isa_ok($tr, 'Net::IPTrie', 'Constructor');
 
-my $n6 = $tr->add(address=>'FEC0:468:D00::', prefix=>40);
+my $n6 = $tr6->add(address=>'FEC0:468:D00::', prefix=>40);
 
-my $a6 = $tr->add(address=>'FEC0:468:D00::', prefix=>48);
+my $a6 = $tr6->add(address=>'FEC0:468:D00::', prefix=>48);
 is($a6->parent->address, $n6->address, 'parent');
 
-my $b6 = $tr->add(address=>'FEC0:468:D00:1::', prefix=>64);
+my $b6 = $tr6->add(address=>'FEC0:468:D00:1::', prefix=>64);
 is($b6->parent->address, $a6->address, 'parent');
 
-my $c6 = $tr->add(address=>'FEC0:468:D00:1::80DF:3C16', prefix=>128);
+my $c6 = $tr6->add(address=>'FEC0:468:D00:1::80DF:3C16', prefix=>128);
 is($c6->parent->address, $b6->address, 'parent');

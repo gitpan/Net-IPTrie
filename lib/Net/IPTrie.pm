@@ -6,19 +6,19 @@ use Carp;
 use NetAddr::IP;
 use Net::IPTrie::Node;
 use vars qw($VERSION);
-$VERSION = '0.5';
+$VERSION = '0.5.1';
 
 1;
 
 =head1 NAME
 
-Net::IPTrie - Perl module for building IPv4 and IPv6 address space hierarchies fast
+Net::IPTrie - Perl module for building IPv4 and IPv6 address space hierarchies
 
 =head1 SYNOPSIS
 
     use Net::IPTrie;
     my $tr = Net::IPTrie->new(version=>4);  # IPv4
-    my $n  = $tr->add(address=>'10.0.0.0/8', prefix=>8);
+    my $n  = $tr->add(address=>'10.0.0.0', prefix=>8);
     my $a  = $tr->add(address=>'10.0.0.1', data=>$data) # prefix defaults to 32
     $a->parent->address eq $n->address and print "$a is within $n";
 
@@ -164,26 +164,30 @@ sub find {
 	my $r = ($iaddress & 2**$bit) == 0 ? 'left' : 'right';
 	
 	if ( !defined $p->$r ){
-	    if ( !$deep ){
+	    if ( $deep ){
+		# Insert new node
+		$p->$r(Net::IPTrie::Node->new(up=>$p));
+	    }else{
 		# Just return the closest covering IP block
 		if ( $p->iaddress ){
 		    return $p;
 		}else{
 		    return $p->parent;
 		}
-	    }else{
-		# Insert new node
-		$p->$r(Net::IPTrie::Node->new(up=>$p));
 	    }
 	}
 	
 	# Walk one step down the tree
 	$p = $p->$r;
 
-	# If the address matches, return node
-	if ( defined $p->iaddress && $p->iaddress == $iaddress 
-	     && $p->prefix == $prefix ){
-	    return $p;
+	if ( defined $p->iaddress ){
+	    # If the address matches, return node
+	    if ( $p->iaddress == $iaddress && $p->prefix == $prefix ){
+		return $p;
+	    }
+	}elsif ( !$deep && ($bit == $self->size - $prefix) ){
+	    # This is a deleted node
+	    return $p->parent;
 	}
     }
     # We fell off the bottom.  We tell where to create a new node.
@@ -355,9 +359,7 @@ Carlos Vicente  <cvicente@cpan.org>
 =head1 SEE ALSO
 
 Net::IPTrie::Node
-
-Net::Patricia relies on a C library and currently does not support IPv6.  It also contains known bugs.
-I have not done any performance comparisons.
+Net::Patricia 
 
 =head1 LICENCE AND COPYRIGHT
 
