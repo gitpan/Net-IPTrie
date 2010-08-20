@@ -13,15 +13,16 @@ name: Net-IPTrie
 provides:
   Net::IPTrie:
     file: lib/Net/IPTrie.pm
-    version: v0.5.1
+    version: 0.6
   Net::IPTrie::Node:
     file: lib/Net/IPTrie/Node.pm
-    version: v0.5.1
+    version: 0.6
 requires:
   Class::Struct: 0.63
   NetAddr::IP: 4.007
+  Scalar::Util: 0
   Test::More: 0
   perl: v5.8.0
 resources:
   license: http://dev.perl.org/licenses/
-version: v0.5.1
+version: 0.6

@@ -6,8 +6,10 @@ my $build = Module::Build->new
      requires    => {
 	 'perl'          => '5.8.0',
 	 'Class::Struct' => '0.63',
+	 'Scalar::Util'  => '0',
 	 'Test::More'    => '0',
 	 'NetAddr::IP'   => '4.007',
      },
+     create_makefile_pl => 'traditional',
      );
 $build->create_build_script;

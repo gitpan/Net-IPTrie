@@ -6,7 +6,7 @@ use Carp;
 use NetAddr::IP;
 use Net::IPTrie::Node;
 use vars qw($VERSION);
-$VERSION = '0.5.1';
+$VERSION = '0.6';
 
 1;
 
@@ -42,7 +42,6 @@ Net::IPTrie - Perl module for building IPv4 and IPv6 address space hierarchies
 =head1 CLASS METHODS
 
 =head2 new - Class Constructor
-
 
   Arguments: 
     Hash with the following keys:

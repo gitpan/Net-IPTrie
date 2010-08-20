@@ -4,8 +4,24 @@ use warnings;
 use strict;
 use Carp;
 use Class::Struct;
+use Scalar::Util qw(weaken);
 use vars qw($VERSION);
-$VERSION = '0.5.1';
+$VERSION = '0.6';
+
+BEGIN {
+    struct (
+	"Net::IPTrie::_Node" => {
+	    'up'        => '$',
+	    'left'      => '$',
+	    'right'     => '$',
+	    'address'   => '$',
+	    'iaddress'  => '$',
+	    'prefix'    => '$',
+	    'data'      => '$',
+	});
+}
+
+use base qw (Net::IPTrie::_Node);
 
 =head1 NAME
 
@@ -18,18 +34,6 @@ Net::IPTrie::Node
 =head1 DESCRIPTION
 
  See Net::IPTrie
-
-=cut
-
-struct (
-'up'        => '$',
-'left'      => '$',
-'right'     => '$',
-'address'   => '$',
-'iaddress'  => '$',
-'prefix'    => '$',
-'data'      => '$',
-);
 
 =head1 CLASS METHODS
 
@@ -48,8 +52,28 @@ struct (
   Examples:
     my $n = Net::IPTrie::Node->new(up=>$up, address=>"10.0.0.1")
 
-=head1 INSTANCE METHODS
+=cut
 
+sub new {
+    my $ret = shift->SUPER::new(@_);
+    if ( defined($ret->{'Net::IPTrie::_Node::up'}) ) {
+	weaken $ret->{'Net::IPTrie::_Node::up'};
+    }
+    return $ret;
+}
+
+sub up {
+    my $self = shift;
+    if (@_) {
+	$self->{'Net::IPTrie::_Node::up'} = shift;
+	if ( defined($self->{'Net::IPTrie::_Node::up'}) ) {
+	    weaken $self->{'Net::IPTrie::_Node::up'};
+	}
+    }
+    return $self->{'Net::IPTrie::_Node::up'};
+}
+
+=head1 INSTANCE METHODS
 =cut
 
 ############################################################################
