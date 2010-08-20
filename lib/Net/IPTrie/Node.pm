@@ -6,7 +6,7 @@ use Carp;
 use Class::Struct;
 use Scalar::Util qw(weaken);
 use vars qw($VERSION);
-$VERSION = '0.6';
+$VERSION = '0.7';
 
 BEGIN {
     struct (

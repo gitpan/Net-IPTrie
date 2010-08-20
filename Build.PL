@@ -6,7 +6,7 @@ my $build = Module::Build->new
      requires    => {
 	 'perl'          => '5.8.0',
 	 'Class::Struct' => '0.63',
-	 'Scalar::Util'  => '0',
+	 'Scalar::Util'  => '1.21',
 	 'Test::More'    => '0',
 	 'NetAddr::IP'   => '4.007',
      },

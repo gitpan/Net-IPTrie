@@ -8,7 +8,7 @@ WriteMakefile
           'PREREQ_PM' => {
                            'Class::Struct' => '0.63',
                            'NetAddr::IP' => '4.007',
-                           'Scalar::Util' => '0',
+                           'Scalar::Util' => '1.21',
                            'Test::More' => '0'
                          },
           'INSTALLDIRS' => 'site',
